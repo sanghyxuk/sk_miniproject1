@@ -1,4 +1,4 @@
-package com.backend.sk_miniproject1;
+package com.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

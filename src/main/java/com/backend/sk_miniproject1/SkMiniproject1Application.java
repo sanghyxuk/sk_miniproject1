@@ -10,6 +10,6 @@ public class SkMiniproject1Application {
         SpringApplication.run(SkMiniproject1Application.class, args);
     }
 /**
- * 오우예
+ * 오우
  */
 }

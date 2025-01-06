@@ -9,5 +9,7 @@ public class SkMiniproject1Application {
     public static void main(String[] args) {
         SpringApplication.run(SkMiniproject1Application.class, args);
     }
-
+/**
+ * 오우예
+ */
 }

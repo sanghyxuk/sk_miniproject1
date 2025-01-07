@@ -3,17 +3,19 @@ package com.backend.controller;
 import com.backend.entity.User;
 import com.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
 
 /**
- * - 로그인: `Post /auth/login`에 닉네임 전달
+ * - 로그인: `Post /auth/login` api 호출을 통해 닉네임으로 로그인 요청
  *          -> 성공 시 세션 생성 및 '로그인 성공' 메시지 반환
- * - 세션 상태 확인: `Get /auth/session`에서 현재 로그인된 사용자 확인
- * - 닉네임 중복 확인 API: 백엔드 쪽에서 구현하고 프론트에서는 api만 받아오는 걸로
+ * - 세션 상태 확인(일단 생략): `Get /auth/session`에서 현재 로그인된 사용자 확인
+ * - 닉네임 중복 확인 API: 'Get /auth/check-nickname' 호출하여 닉네임 존재 확인 여부 검토
  */
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/auth")
 public class LoginController {
@@ -32,7 +34,7 @@ public class LoginController {
         return "로그인 성공: " + user.getNickname();
     }
 
-    // 세션 상태 확인
+    // 세션 상태 확인 (x)
     @GetMapping("/session")
     public String checkSession(HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -42,10 +44,11 @@ public class LoginController {
         return "현재 로그인 사용자: " + user.getNickname();
     }
 
-    // 닉네임 중복 확인 API
+    // 닉네임 중복 확인
     @GetMapping("/check-nickname")
-    public boolean checkNickname(@RequestParam String nickname) {
-        return userRepository.findByNickname(nickname) != null;
+    public ResponseEntity<Boolean> checkNickname(@RequestParam String nickname) {
+        boolean exists = userRepository.findByNickname(nickname) != null;
+        return ResponseEntity.ok(exists);
     }
 
 

@@ -36,7 +36,7 @@ public class LoginController {
     public String checkSession(HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            return "로그인 상태가 아닙니다.";
+            return "로그인 상태가 아닙니다";
         }
         return "현재 로그인 사용자: " + user.getNickname();
     }

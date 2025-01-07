@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:3001") // 프론트엔드 URL (혹시나 문제 생길까봐)
 public class LoginController {
 
     @Autowired

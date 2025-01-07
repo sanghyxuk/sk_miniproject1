@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
  * - 로그인: `Post /auth/login`에 닉네임 전달
  *          -> 성공 시 세션 생성 및 '로그인 성공' 메시지 반환
  * - 세션 상태 확인: `Get /auth/session`에서 현재 로그인된 사용자 확인
+ * - 닉네임 중복 확인 API: 백엔드 쪽에서 구현하고 프론트에서는 api만 받아오는 걸로
  */
 
 @RestController

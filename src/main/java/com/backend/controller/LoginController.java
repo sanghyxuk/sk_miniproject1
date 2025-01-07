@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:3001") // 프론트엔드 URL (혹시나 문제 생길까봐)
 public class LoginController {
 
     @Autowired
@@ -40,5 +41,12 @@ public class LoginController {
         }
         return "현재 로그인 사용자: " + user.getNickname();
     }
+
+    // 닉네임 중복 확인 API
+    @GetMapping("/check-nickname")
+    public boolean checkNickname(@RequestParam String nickname) {
+        return userRepository.findByNickname(nickname) != null;
+    }
+
 
 }

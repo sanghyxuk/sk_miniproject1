@@ -1,4 +1,7 @@
-package com.backend.controller;
+package com.backend.config;
+/**
+ * config 부분은 따로 빼는 게 더 안전함
+ */
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

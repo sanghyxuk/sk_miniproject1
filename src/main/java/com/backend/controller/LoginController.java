@@ -27,9 +27,15 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@RequestParam String nickname, HttpSession session) {
         User user = userRepository.findByNickname(nickname);
+
         if (user == null) {
-            return "사용가능한 닉네임입니다.";
+            // 사용자 등록
+            user = new User();
+            user.setNickname(nickname);
+            userRepository.save(user);
+            return "새로운 사용자로 등록되었습니다. 닉네임: " + user.getNickname();
         }
+
         session.setAttribute("user", user);
         return "로그인 성공: " + user.getNickname();
     }

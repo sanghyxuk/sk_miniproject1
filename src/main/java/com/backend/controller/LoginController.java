@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpSession;
 /**
  * - 로그인: `Post /auth/login` api 호출을 통해 닉네임으로 로그인 요청
  *          -> 성공 시 세션 생성 및 '로그인 성공' 메시지 반환
- * - 세션 상태 확인(일단 생략): `Get /auth/session`에서 현재 로그인된 사용자 확인
+ * - 세션 상태 확인(생략): `Get /auth/session`에서 현재 로그인된 사용자 확인
  * - 닉네임 중복 확인 API: 'Get /auth/check-nickname' 호출하여 닉네임 존재 확인 여부 검토
  */
 

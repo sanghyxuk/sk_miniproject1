@@ -28,7 +28,7 @@ public class LoginController {
     public String login(@RequestParam String nickname, HttpSession session) {
         User user = userRepository.findByNickname(nickname);
         if (user == null) {
-            return "사용자를 찾을 수 없습니다.";
+            return "사용가능한 닉네임입니다.";
         }
         session.setAttribute("user", user);
         return "로그인 성공: " + user.getNickname();

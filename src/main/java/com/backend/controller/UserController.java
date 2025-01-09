@@ -4,10 +4,9 @@ import com.backend.entity.User;
 import com.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("/rank")
-    public ResponseEntity<Integer> getRank(String nickname) {
+    public ResponseEntity<Integer> getRank(@RequestParam String nickname) {
         // 점수 기준으로 정렬된 사용자 목록
         List<User> users = userRepository.findAll(Sort.by(Sort.Direction.DESC, "score"));
 
@@ -40,5 +39,20 @@ public class UserController {
         }
 
         return ResponseEntity.ok(rank);
+    }
+
+    @PostMapping("/updateScore")
+    public ResponseEntity<String> updateScore(@RequestParam String nickname, @RequestParam int score) {
+        // 닉네임으로 사용자 검색
+        User user = userRepository.findByNickname(nickname);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        // 점수 업데이트
+        user.setScore(score);
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Score updated successfully");
     }
 }

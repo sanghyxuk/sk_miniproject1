@@ -4,9 +4,12 @@ import com.backend.entity.User;
 import com.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -15,60 +18,27 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    // 모든 사용자 조회 (score DESC, createdAt ASC)
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll(Sort.by(Sort.Order.desc("score"), Sort.Order.asc("createdAt")));
+    @GetMapping("/rankings")
+    public ResponseEntity<List<User>> getRankings() {
+        // 점수 기준으로 정렬된 사용자 목록 반환
+        List<User> users = userRepository.findAll(Sort.by(Sort.Direction.DESC, "score"));
+        return ResponseEntity.ok(users);
     }
 
-    // 사용자 생성
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
-    }
+    @GetMapping("/rank")
+    public ResponseEntity<Integer> getRank(String nickname) {
+        // 점수 기준으로 정렬된 사용자 목록
+        List<User> users = userRepository.findAll(Sort.by(Sort.Direction.DESC, "score"));
 
-    // 닉네임으로 사용자 찾기
-    @GetMapping("/{nickname}")
-    public Optional<User> getUserByNickname(@PathVariable String nickname) {
-        User user = userRepository.findByNickname(nickname);
-        return Optional.ofNullable(user);
-    }
-
-    // 주변 사용자
-    // 특정 사용자의 score를 기준으로 정렬된 사용자 리스트
-    @GetMapping("/surround/{nickname}")
-    public List<User> getSurroundingUsers(@PathVariable String nickname) {
-        List<User> sortedUsers = userRepository.findAll(Sort.by(
-                Sort.Order.desc("score"), Sort.Order.asc("createdAt")));
-
-        int index = -1;
-        for (int i = 0; i < sortedUsers.size(); i++) {
-            if (sortedUsers.get(i).getNickname().equals(nickname)) {
-                index = i;
+        // 주어진 닉네임의 사용자 등수 계산
+        int rank = 0;
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getNickname().equals(nickname)) {
+                rank = i + 1; // 등수는 1부터 시작
                 break;
             }
         }
-        if (index == -1) {
-            return Collections.emptyList();
-        }
 
-        int start = Math.max(0, index - 1);
-        int end = Math.min(sortedUsers.size(), index + 2);
-        return sortedUsers.subList(start, end);
+        return ResponseEntity.ok(rank);
     }
-
-    // 점수 업데이트 API
-    @PostMapping("/updateScore")
-    public String updateScore(@RequestParam String nickname, @RequestParam int score) {
-        User user = userRepository.findByNickname(nickname);
-        if (user != null) {
-            user.setScore(user.getScore() + score); // 점수 누적
-            userRepository.save(user);
-            return "성공적으로 점수가 입력되었습니다.";
-
-        } else {
-            return "점수 입력에 실패하였습니다.";
-        }
-    }
-
 }

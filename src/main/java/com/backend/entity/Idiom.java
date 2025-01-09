@@ -52,3 +52,4 @@ public class Idiom {
         this.meaning = meaning;
     }
 }
+// 아

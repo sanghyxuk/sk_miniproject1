@@ -19,10 +19,13 @@ public class QuizResult {
     private int score; // 점수
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, updatable = false)
+    private Date createdAt = new Date(); // 생성 시간
+
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date completedAt = new Date(); // 완료 시간
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -45,6 +48,14 @@ public class QuizResult {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Date getCompletedAt() {

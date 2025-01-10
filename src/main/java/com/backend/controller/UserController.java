@@ -49,10 +49,13 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
 
-        // 점수 업데이트
-        user.setScore(score);
-        userRepository.save(user);
+        // 점수가 현재 저장된 점수보다 높을 경우에만 업데이트
+        if (score > user.getScore()) {
+            user.setScore(score);
+            userRepository.save(user);
+            return ResponseEntity.ok("New high score updated successfully");
+        }
 
-        return ResponseEntity.ok("Score updated successfully");
+        return ResponseEntity.ok("Score is lower than or equal to the current high score, no update made");
     }
 }
